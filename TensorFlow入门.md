@@ -1,4 +1,23 @@
-## 入门
+### TensorFlow的核心组件
+分布式TensorFlow的核心组件（core runtime）包括：分发中心（distributed master）、执行器（dataflow executor/worker service）、内核应用（kernel implementation）和最底端的设备层（device layer）/网络层（networking layer）。
+
+分发中心从输入的数据流图中剪取子图（subgraph），将其划分为操作片段并启动执行器。分发中心处理数据流图时会进行预设定的操作优化，包括公共子表达式消去（common subexpression elimination）、常量折叠（constant folding）等。
+
+执行器负责图操作（graph operation）在进程和设备中的运行、收发其它执行器的结果。分布式TensorFlow拥有参数器（parameter server）以汇总和更新其它执行器返回的模型参数。执行器在调度本地设备时会选择进行并行计算和GPU加速。
+
+内核应用负责单一的图操作，包括数学计算、数组操作（array manipulation）、控制流（control flow）和状态管理操作（state management operations）。内核应用使用Eigen执行张量的并行计算、cuDNN库等执行GPU加速、gemmlowp执行低数值精度计算，此外用户可以在内核应用中注册注册额外的内核（fused kernels）以提升基础操作，例如激励函数和其梯度计算的运行效率。
+
+单进程版本的TensorFlow没有分发中心和执行器，而是使用特殊的会话应用（Session implementation）联系本地设备。TensorFlow的C语言API是核心组件和用户代码的分界，其它组件/API均通过C语言API与核心组件进行交互。
+
+
+![image.png](attachment:image.png)
+
+
+### Tensorflow算法构成(入门)
+* 加载一个预构建的数据集。
+* 构建对图像进行分类的神经网络机器学习模型。
+* 训练此神经网络。
+* 评估模型的准确率。
 
 
 
